@@ -1,0 +1,47 @@
+<div class="center" style="height: 100%;">
+
+    <mat-card>
+        <div id="header" class="prevent-select">
+            <div class="logo"></div>
+            Pomodoro
+            <br>
+        </div>
+
+        <div style="text-align: center;">
+            <form [formGroup]='form_group'>
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName='email' type="email">
+                    <mat-error >A valid email is required.</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput formControlName='password' [type]="hide ? 'password' : 'text'">
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide">
+                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error >Enter a valid password.</mat-error>
+                </mat-form-field>
+            </form>
+            <button mat-button (click)='forgotPassword()'>Forgot password?</button>
+            <br>
+            <button mat-flat-button color="primary" (click)="signIn()">Sign in</button>
+            <br>
+            <button mat-stroked-button (click)="googleSignIn()">
+                <img src="../../assets/img/google-icon.svg" alt="google">
+                Continue with Google
+            </button>
+            <br><br>
+            <mat-divider></mat-divider>
+            <br>
+            <button mat-stroked-button color="primary" (click)="createAccount()"><b>Create account</b></button>
+            <br>
+            <button mat-stroked-button color="warn" (click)="anonymousSignIn()"><b>Continue without an
+                    account</b></button>
+        </div>
+
+    </mat-card>
+
+</div>

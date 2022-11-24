@@ -1,0 +1,22 @@
+mat-panel-description {
+    width: 100%;
+}
+mat-card{
+    margin-bottom: 1%;
+}
+
+@media screen and (orientation:landscape) {
+    .main{
+        width: 50vw;
+    }
+}
+
+@media screen and (orientation:portrait) {
+    .main{
+        width: 90vw;
+    }
+}
+
+#loading{
+    height:100%;
+}

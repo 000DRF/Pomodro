@@ -97,6 +97,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "Pomodoro:build:production",
+            "firebaseProject": "pomodoro-list",
+            "firebaseHostingSite": "pomodoro-list"
+          }
         }
       }
     }
