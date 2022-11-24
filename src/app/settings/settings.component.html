@@ -1,1 +1,92 @@
-<p>settings works!</p>
+<span *ngIf="!loading else loading_bar" class="prevent-select">
+    <form [formGroup]="formGroup">
+
+        <h2>Time</h2>
+        <div class="section">
+            <div>
+                <span class="label">
+                    <label>Pomodoro</label> <b>{{formatLabel(formGroup.get('pom')?.value)}}</b>
+                </span>
+                <mat-divider></mat-divider>
+                <mat-slider discrete [displayWith]="formatLabel"  step="1" min="1" max="60"
+                    aria-label="units">
+                    <input formControlName="pom" matSliderThumb>
+                </mat-slider>
+            </div>
+
+            <div>
+                <span class="label">
+                    <label>Short break</label> <b>{{formatLabel(formGroup.get('short_break')?.value)}}</b>
+                </span>
+                <mat-divider></mat-divider>
+                <mat-slider discrete [displayWith]="formatLabel"  step="1" min="1" max="60"
+                    aria-label="units">
+                    <input formControlName="short_break" matSliderThumb>
+                </mat-slider>
+            </div>
+
+            <div>
+                <span class="label">
+                    <label>Break</label> <b>{{formatLabel(formGroup.get('break')?.value)}}</b>
+                </span>
+                <mat-divider></mat-divider>
+                <mat-slider discrete [displayWith]="formatLabel" step="1" min="1" max="60"
+                    aria-label="units">
+                    <input formControlName="break" matSliderThumb>
+                </mat-slider>
+            </div>
+            <div>
+                <span class="label">
+                    <label>Break cost</label> <b>{{formGroup.get('cost')?.value}}</b>
+                </span>
+                <mat-divider></mat-divider>
+                <mat-slider discrete  step="1" min="1" max="10" aria-label="units">
+                    <input formControlName="cost" matSliderThumb>
+                </mat-slider>
+            </div>
+        </div>
+        <mat-divider></mat-divider>
+
+        <h2>Timer</h2>
+        <div class="section">
+            <div>
+                <mat-slide-toggle formControlName="auto_pom">Auto start pomodoro</mat-slide-toggle>
+            </div>
+
+            <div>
+                <mat-slide-toggle formControlName="auto_break">Auto start break</mat-slide-toggle>
+            </div>
+
+
+        </div>
+        <mat-divider></mat-divider>
+
+        <h2>App</h2>
+        <div class="section">
+            <div>
+                <mat-slide-toggle formControlName="notifications">Notifications</mat-slide-toggle>
+            </div>
+
+            <div>
+                <mat-slide-toggle formControlName="sound">Sound</mat-slide-toggle>
+            </div>
+
+            <div>
+                <mat-slide-toggle formControlName="dark_mode">Dark mode</mat-slide-toggle>
+            </div>
+        </div>
+
+    </form>
+    <div style=" display: flex; height: 3%; margin-top: 2%;" *ngIf="!updating; else loading_bar">
+
+        <span class="spacer"></span>
+        <button mat-flat-button color="primary" (click)="save()">Apply</button>
+    </div>
+
+</span>
+
+<ng-template #loading_bar>
+    <div style=" height: 3%; margin-top: 2%;">
+        <mat-progress-bar mode="query"></mat-progress-bar>
+    </div>
+</ng-template>

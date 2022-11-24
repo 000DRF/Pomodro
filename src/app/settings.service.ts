@@ -40,7 +40,6 @@ export class SettingsService {
       dark_mode: new FormControl(this.settings.dark_mode, Validators.required)
     });
     this.loading = false;
-    console.log('initFG:', this.loading)
   }
 
   public async save() {

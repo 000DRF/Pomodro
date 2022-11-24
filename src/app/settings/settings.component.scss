@@ -1,0 +1,14 @@
+.section {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row wrap;
+}
+
+.label {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mat-slider {
+    width: 100%;
+}
