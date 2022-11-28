@@ -1,1 +1,15 @@
-<p>timer works!</p>
+<span *ngIf="!loading; else loading_bar">
+    <span *ngIf="labelSelected;else select_label">
+        <h1>TIMER</h1>
+    </span>
+</span>
+
+<ng-template #loading_bar>
+    <mat-card-footer>
+        <mat-progress-bar mode="query"></mat-progress-bar>
+    </mat-card-footer>
+</ng-template>
+
+<ng-template #select_label>
+    <app-labels></app-labels>
+</ng-template>

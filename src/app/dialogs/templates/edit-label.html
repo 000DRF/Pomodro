@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Edit label</h2>
+<mat-dialog-content style="padding-top: 15px;">
+    <span style="width:100; padding-top: 10%;">
+        <form [formGroup]="form_group" style="display: flex;">
+            <input matInput type="color" formControlName="color" style="width: 50px; height: 40px;">
+            <input matInput formControlName="name" [placeholder]="label.name">
+        </form>
+    </span>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="submit()" [disabled]="form_group.disabled">Done</button>
+</mat-dialog-actions>

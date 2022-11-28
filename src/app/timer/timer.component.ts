@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SessionService } from '../session.service';
 
 @Component({
   selector: 'app-timer',
@@ -7,4 +8,15 @@ import { Component } from '@angular/core';
 })
 export class TimerComponent {
 
+  constructor(private session: SessionService) {
+
+  }
+
+  get loading(): boolean {
+    return this.session.loading;
+  }
+
+  get labelSelected(): boolean {
+    return this.session.labelSelected;
+  }
 }

@@ -31,7 +31,7 @@ import { TimerComponent } from './timer/timer.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AuthService } from './auth.service';
 import { SettingsService } from './settings.service';
-import { CreateAccountDialog, ForgotPasswordDialog } from './dialogs/dialogs.components';
+import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './dialogs/dialogs.components';
 
 @NgModule({
   declarations: [
@@ -41,6 +41,7 @@ import { CreateAccountDialog, ForgotPasswordDialog } from './dialogs/dialogs.com
     TimerComponent,
     SettingsComponent,
     CreateAccountDialog,
+    EditLabelDialog,
     ForgotPasswordDialog
   ],
   imports: [

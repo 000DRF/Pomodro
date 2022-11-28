@@ -8,8 +8,7 @@
                     <label>Pomodoro</label> <b>{{formatLabel(formGroup.get('pom')?.value)}}</b>
                 </span>
                 <mat-divider></mat-divider>
-                <mat-slider discrete [displayWith]="formatLabel"  step="1" min="1" max="60"
-                    aria-label="units">
+                <mat-slider discrete [displayWith]="formatLabel" step="1" min="1" max="60" aria-label="units">
                     <input formControlName="pom" matSliderThumb>
                 </mat-slider>
             </div>
@@ -19,8 +18,7 @@
                     <label>Short break</label> <b>{{formatLabel(formGroup.get('short_break')?.value)}}</b>
                 </span>
                 <mat-divider></mat-divider>
-                <mat-slider discrete [displayWith]="formatLabel"  step="1" min="1" max="60"
-                    aria-label="units">
+                <mat-slider discrete [displayWith]="formatLabel" step="1" min="1" max="60" aria-label="units">
                     <input formControlName="short_break" matSliderThumb>
                 </mat-slider>
             </div>
@@ -30,8 +28,7 @@
                     <label>Break</label> <b>{{formatLabel(formGroup.get('break')?.value)}}</b>
                 </span>
                 <mat-divider></mat-divider>
-                <mat-slider discrete [displayWith]="formatLabel" step="1" min="1" max="60"
-                    aria-label="units">
+                <mat-slider discrete [displayWith]="formatLabel" step="1" min="1" max="60" aria-label="units">
                     <input formControlName="break" matSliderThumb>
                 </mat-slider>
             </div>
@@ -40,7 +37,7 @@
                     <label>Break cost</label> <b>{{formGroup.get('cost')?.value}}</b>
                 </span>
                 <mat-divider></mat-divider>
-                <mat-slider discrete  step="1" min="1" max="10" aria-label="units">
+                <mat-slider discrete step="1" min="1" max="10" aria-label="units">
                     <input formControlName="cost" matSliderThumb>
                 </mat-slider>
             </div>
@@ -86,7 +83,7 @@
 </span>
 
 <ng-template #loading_bar>
-    <div style=" height: 3%; margin-top: 2%;">
-        <mat-progress-bar mode="query"></mat-progress-bar>
-    </div>
+    <mat-card-footer>
+            <mat-progress-bar mode="query"></mat-progress-bar>
+    </mat-card-footer>
 </ng-template>
