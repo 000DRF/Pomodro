@@ -1,7 +1,41 @@
 <span *ngIf="!loading; else loading_bar">
     <span *ngIf="labelSelected;else select_label">
-        <h1>TIMER</h1>
+        <div style="margin: 2%;" class="prevent-select">
+            <div style="display: flex;">
+                <mat-chip>
+                    <mat-icon matChipAvatar [style.color]="label.color">lens</mat-icon> {{label.name}}
+                </mat-chip>
+                <span class="spacer"></span>
+                <span style="padding: 7px;">
+                    <b>Pomodoro #{{this.session.poms + 1}}</b>
+                    <i *ngIf="this.session.mode ==='break' && display.time"> Break</i></span>
+            </div>
+            <div class="center">
+
+                <div id="timer">
+                    <div *ngIf="target.time">{{display.toString()}}</div>
+                    <div id="timer-actions">
+                        <button mat-fab color="primary" aria-label="Pause" *ngIf="display.time"
+                            (click)="isPaused? start(): pause()">
+                            <mat-icon>{{isPaused? 'play_arrow': 'pause'}}</mat-icon>
+                        </button>
+                        <button mat-fab color="primary" aria-label="Work" (click)="startWork()" *ngIf="validPom">
+                            <mat-icon>work</mat-icon>
+                        </button>
+                        <button mat-fab color="accent" aria-label="Start break" *ngIf="validBreak"
+                            (click)="startBreak()">
+                            <mat-icon>spa</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </span>
+    <mat-card-footer>
+        <mat-progress-bar mode="determinate" [value]="progress" *ngIf="target.time"
+            [color]="session.mode==='pom'? 'warn':'primary'"></mat-progress-bar>
+    </mat-card-footer>
 </span>
 
 <ng-template #loading_bar>

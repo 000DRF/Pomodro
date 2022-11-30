@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { addDoc, collection, doc, DocumentReference, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, collection, doc, docSnapshots, DocumentReference, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { deleteDoc } from '@firebase/firestore';
 import { AuthService } from './auth.service';
 import { Label } from './pojos/label';
 import { Session } from './pojos/session';
+import { WorkEntry } from './pojos/work-entry';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class DbService {
 
   constructor(private auth: AuthService, private db: Firestore) { }
 
-  public async pullSession() {
+  public pullSession() {
     const sod = new Date();
     const eod = new Date();
     // start of day
@@ -27,18 +28,29 @@ export class DbService {
     const sessionsRef = collection(this.db, this.auth.user_path + '/sessions');
     const q = query(sessionsRef, where('time_stamp', '>=', sod), where('time_stamp', '<=', eod)).withConverter(Session.converter)
 
-    return await getDocs(q);
+    return getDocs(q);
   }
 
-  public async pullLabels() {
+  public pullLabels() {
     const labelsRef = collection(this.db, this.auth.user_path + '/labels');
     const q = query(labelsRef, orderBy("name", "asc"), where('removed', '==', false)).withConverter(Label.converter);
-    return await getDocs(q);
+    return getDocs(q);
   }
 
   public async pullLabel(label_ref: DocumentReference) {
     const doc = await getDoc(label_ref.withConverter(Label.converter));
     return doc.get('removed') ? undefined : doc.data();
+  }
+
+  public async pullWorkEntry(work_entry_ref: DocumentReference) {
+    const doc = await getDoc(work_entry_ref.withConverter(WorkEntry.converter))
+    return doc.data()
+  }
+
+  public async findWorkEntry(path:string, label_ref: DocumentReference){
+    const workEntries = collection(this.db, path + 'work')
+    const q = query(workEntries, where('label', '==', label_ref)).withConverter(WorkEntry.converter)
+    return getDocs(q);
   }
 
   public async pullSettings() {

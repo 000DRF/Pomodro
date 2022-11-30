@@ -10,15 +10,15 @@ export class Settings {
         return new Settings()
     }
 
-    pom: number;
-    break: number;
-    short_break: number;
-    auto_pom: boolean;
-    auto_break: boolean;
-    cost: number;
-    sound: boolean;
-    notifications: boolean;
-    dark_mode: boolean;
+    public pom: number;
+    public break: number;
+    public short_break: number;
+    public auto_pom: boolean;
+    public auto_break: boolean;
+    public cost: number;
+    public sound: boolean;
+    public notifications: boolean;
+    public dark_mode: boolean;
 
     constructor()
     constructor(pom: number, _break: number, short_break: number, auto_pom: boolean, auto_break: boolean, cost: number, sound: boolean, notifications: boolean, dark_mode: boolean)

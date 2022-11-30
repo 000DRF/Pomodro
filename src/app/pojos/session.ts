@@ -1,68 +1,53 @@
 import { DocumentReference, DocumentSnapshot, SnapshotOptions, Timestamp } from "@angular/fire/firestore";
-import { Label } from "./label";
+import { Time } from "./time";
 
 export class Session {
     static readonly converter = {
         toFirestore: (session: Session) => {
             return {
                 time_stamp: session.time_stamp,
-                label: session.label instanceof Label ? session.label.ref : session.label,
+                work_entry: session.work_entry,
                 mode: session.mode,
                 poms: session.poms,
-                hr: session.hr,
-                min: session.min,
-                sec: session.sec,
-                buff_hr: session.buff_hr,
-                buff_min: session.buff_min,
-                buff_sec: session.buff_sec
+                pom: { target: session.pom.target.time, display: session.pom.display.time },
+                break: { target: session.break.target.time, display: session.break.target.time }
             };
         },
         fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
             const data = snapshot.data(options);
             return new Session(
                 data!['time_stamp'],
-                data!['label'],
+                data!['work_entry'],
                 data!['mode'],
                 data!['poms'],
-                data!['hr'],
-                data!['min'],
-                data!['sec'],
-                data!['buff_hr'],
-                data!['buff_min'],
-                data!['buff_sec']
+                data!['pom'],
+                data!['break'],
+                snapshot.ref
             );
         }
     }
-    time_stamp: Timestamp;
-    label: DocumentReference | Label | undefined;
+    public time_stamp: Timestamp;
+    public work_entry!: DocumentReference | undefined;
 
-    mode: 'pom' | 'short_break' | 'break';
-    poms: number;
+    public mode: 'pom' |  'break';
+    public poms: number;
 
-    hr: number;
-    min: number;
-    sec: number;
+    public pom: { target: Time, display: Time };
+    public break: { target: Time, display: Time };
+    public ref!: DocumentReference;
 
-    buff_hr: number;
-    buff_min: number;
-    buff_sec: number;
-
-    constructor()
-    constructor(time_stamp: Timestamp, label: DocumentReference | Label | undefined, mode: 'pom' | 'short_break' | 'break', poms: number, hr: number, min: number, sec: number, buff_hr: number, buff_min: number, buff_sec: number)
-    constructor(time_stamp?: Timestamp, label?: DocumentReference | Label | undefined, mode?: 'pom' | 'short_break' | 'break', poms?: number, hr?: number, min?: number, sec?: number, buff_hr?: number, buff_min?: number, buff_sec?: number) {
+    constructor(time_stamp?: Timestamp, work_entry?: DocumentReference | undefined, mode?: 'pom' |'break', poms?: number, pom?: { target: number, display: number }, _break?: { target: number, display: number }, ref?: DocumentReference) {
         this.time_stamp = time_stamp ? time_stamp : Timestamp.now();
-        this.label = label;
 
-        this.mode = mode ? mode : 'pom';
+        this.work_entry = work_entry;
+        this.mode = mode ? mode : 'break';
+
         this.poms = poms ? poms : 0;
 
-        this.hr = hr ? hr : 0;
-        this.min = min ? min : 0;
-        this.sec = sec ? sec : 0;
+        this.pom = pom ? { target: new Time(pom.target), display: new Time(pom.display) } : { target: new Time(0), display: new Time(0) };
+        this.break = _break ? { target: new Time(_break.target), display: new Time(_break.display) } : { target: new Time(0), display: new Time(0) };
 
-        this.buff_hr = buff_hr ? buff_hr : 0;
-        this.buff_min = buff_min ? buff_min : 0;
-        this.buff_sec = buff_sec ? buff_sec : 0;
+        if (ref) this.ref = ref;
     }
 
 }

@@ -128,11 +128,7 @@ export class LabelsComponent {
 
   public selectLabel() {
     if (this.label_control.valid)
-      this.session.label = this.label_control.value;
-  }
-
-  public get btnDisabled(): boolean {
-    return !this.session.labelSelected;
+      this.session.setLabel(this.label_control.value);
   }
 
   public get labels(): Label[]{

@@ -11,7 +11,7 @@ export class SettingsService {
   public loading: boolean = true;
 
   public form_group!: FormGroup;
-  private settings!: Settings;
+  public settings!: Settings;
   constructor(private db: DbService) {
     this.initSettings()
   }
