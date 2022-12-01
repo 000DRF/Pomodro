@@ -18,13 +18,14 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
-import { provideAuth,getAuth } from '@angular/fire/auth';
-import { provideFirestore,getFirestore } from '@angular/fire/firestore';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { LabelsComponent } from './labels/labels.component';
 import { TimerComponent } from './timer/timer.component';
@@ -67,6 +68,7 @@ import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './di
     MatSnackBarModule,
     MatTabsModule,
     MatToolbarModule,
+    MatTooltipModule
   ],
   providers: [AuthService, SettingsService],
   bootstrap: [AppComponent]

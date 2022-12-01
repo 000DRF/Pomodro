@@ -26,17 +26,26 @@ export class Session {
             );
         }
     }
+    static readonly update = (session: Session)=>{
+        return {
+            work_entry: session.work_entry,
+            mode: session.mode,
+            poms: session.poms,
+            pom: { target: session.pom.target.time, display: session.pom.display.time },
+            break: { target: session.break.target.time, display: session.break.target.time }
+        };
+    }
     public time_stamp: Timestamp;
     public work_entry!: DocumentReference | undefined;
 
-    public mode: 'pom' |  'break';
+    public mode: 'pom' | 'break';
     public poms: number;
 
     public pom: { target: Time, display: Time };
     public break: { target: Time, display: Time };
     public ref!: DocumentReference;
 
-    constructor(time_stamp?: Timestamp, work_entry?: DocumentReference | undefined, mode?: 'pom' |'break', poms?: number, pom?: { target: number, display: number }, _break?: { target: number, display: number }, ref?: DocumentReference) {
+    constructor(time_stamp?: Timestamp, work_entry?: DocumentReference | undefined, mode?: 'pom' | 'break', poms?: number, pom?: { target: number, display: number }, _break?: { target: number, display: number }, ref?: DocumentReference) {
         this.time_stamp = time_stamp ? time_stamp : Timestamp.now();
 
         this.work_entry = work_entry;

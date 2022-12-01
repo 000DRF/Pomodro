@@ -20,6 +20,12 @@ export class WorkEntry {
             );
         }
     }
+    static readonly update = (work_entry: WorkEntry) => {
+        return {
+            time: work_entry.time.time,
+            label: work_entry.label
+        }
+    }
     public time_stamp: Timestamp;
     public time: Time;
     public label!: DocumentReference;
@@ -33,11 +39,11 @@ export class WorkEntry {
         if (ref) this.ref = ref;
     }
 
-    public get workTime(){
+    public get workTime() {
         return this.time.time;
     }
 
-    public set workTime(time: number){
+    public set workTime(time: number) {
         this.time.time = time;
     }
 }

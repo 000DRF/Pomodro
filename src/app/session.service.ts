@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DocumentReference } from '@angular/fire/firestore';
 import { DbService } from './db.service';
 import { Label } from './pojos/label';
 import { Session } from './pojos/session';
@@ -14,7 +13,7 @@ export class SessionService {
   public loading: boolean = true;
 
   public session!: Session;
-  public work_entry!: WorkEntry;
+  public work_entry!: WorkEntry | undefined;
   private _label!: Label;
 
 
@@ -34,16 +33,17 @@ export class SessionService {
             if (work_entry)
               this.work_entry = work_entry;
             // Pull label
-            await this.db.pullLabel(this.work_entry.label)
-              .then((label) => {
-                if (label)
-                  this._label = label;
-              })
-              .catch(error => {
-                console.error(error);
-                this.work_entry = new WorkEntry();
-                this.session.work_entry = undefined;
-              })
+            if (this.work_entry)
+              await this.db.pullLabel(this.work_entry.label)
+                .then((label) => {
+                  if (label)
+                    this._label = label;
+                })
+                .catch(error => {
+                  console.error(error);
+                  this.work_entry = new WorkEntry();
+                  this.session.work_entry = undefined;
+                })
           })
           .catch(error => console.error(error))
     });
@@ -64,13 +64,14 @@ export class SessionService {
     this._label = label;
     if (this.session.ref) {
       let querySnapshot = await this.db.findWorkEntry(this.session.ref.path, label.ref);
-      querySnapshot.forEach((doc)=>{
+      querySnapshot.forEach((doc) => {
         this.work_entry = doc.data();
-        return;
       })
     }
-    this.work_entry = new WorkEntry();
-    this.work_entry.label = label.ref;    
+    if (!this.work_entry) {
+      this.work_entry = new WorkEntry();
+      this.work_entry.label = label.ref;
+    }
   }
 
 }

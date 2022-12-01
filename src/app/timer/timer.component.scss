@@ -5,7 +5,21 @@
     font-weight: bolder;
 }
 
+#time{
+    min-height: 4em;
+}
+
 #timer-actions {
     display: flex;
     justify-content: space-evenly;
+}
+
+.flash {
+    animation: flashes 1s linear infinite;
+}
+
+@keyframes flashes {
+    50% {
+        opacity: 0;
+    }
 }

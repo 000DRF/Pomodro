@@ -36,8 +36,7 @@ export class SettingsService {
       auto_pom: new FormControl(this.settings.auto_pom, Validators.required),
       auto_break: new FormControl(this.settings.auto_break, Validators.required),
       sound: new FormControl(this.settings.sound, Validators.required),
-      notifications: new FormControl(this.settings.notifications, Validators.required),
-      dark_mode: new FormControl(this.settings.dark_mode, Validators.required)
+      notifications: new FormControl(this.settings.notifications, Validators.required)
     });
     this.loading = false;
   }
@@ -58,7 +57,6 @@ export class SettingsService {
           this.settings.auto_break = this.form_group.get('auto_break')?.value;
           this.settings.sound = this.form_group.get('sound')?.value;
           this.settings.notifications = this.form_group.get('notifications')?.value;
-          this.settings.dark_mode = this.form_group.get('dark_mode')?.value;
         })
         .catch(error => {
           console.error(error);

@@ -5,7 +5,7 @@ export class Settings {
         if (snapshot.exists()) {
             const data = snapshot.data()['settings'];
             if (data)
-                return new Settings( data['pom'], data['break'], data['short_break'], data['auto_pom'], data['auto_break'], data['cost'], data!['sound'], data['notifications'], data['dark_mode']);
+                return new Settings( data['pom'], data['break'], data['short_break'], data['auto_pom'], data['auto_break'], data['cost'], data!['sound'], data['notifications']);
         }
         return new Settings()
     }
@@ -18,11 +18,10 @@ export class Settings {
     public cost: number;
     public sound: boolean;
     public notifications: boolean;
-    public dark_mode: boolean;
 
     constructor()
-    constructor(pom: number, _break: number, short_break: number, auto_pom: boolean, auto_break: boolean, cost: number, sound: boolean, notifications: boolean, dark_mode: boolean)
-    constructor(pom?: number, _break?: number, short_break?: number, auto_pom?: boolean, auto_break?: boolean, cost?: number, sound?: boolean, notifications?: boolean, dark_mode?: boolean) {
+    constructor(pom: number, _break: number, short_break: number, auto_pom: boolean, auto_break: boolean, cost: number, sound: boolean, notifications: boolean)
+    constructor(pom?: number, _break?: number, short_break?: number, auto_pom?: boolean, auto_break?: boolean, cost?: number, sound?: boolean, notifications?: boolean) {
         this.pom = pom ? pom : 25;
         this.break = _break ? _break : 15;
         this.short_break = short_break ? short_break : 5;
@@ -31,6 +30,5 @@ export class Settings {
         this.cost = cost ? cost : 4;
         this.sound = sound ? sound : true;
         this.notifications = notifications ? notifications : false;
-        this.dark_mode = dark_mode ? dark_mode : false;
     }
 }

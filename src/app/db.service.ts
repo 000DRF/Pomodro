@@ -47,8 +47,9 @@ export class DbService {
     return doc.data()
   }
 
-  public async findWorkEntry(path:string, label_ref: DocumentReference){
-    const workEntries = collection(this.db, path + 'work')
+  public async findWorkEntry(path: string, label_ref: DocumentReference) {
+    console.log('looking for ref')
+    const workEntries = collection(this.db, path + '/work')
     const q = query(workEntries, where('label', '==', label_ref)).withConverter(WorkEntry.converter)
     return getDocs(q);
   }
@@ -89,5 +90,40 @@ export class DbService {
   }
   public async editLabel(ref: DocumentReference, data: any) {
     return updateDoc(ref, data)
+  }
+
+  public async pushProgress(session: Session, work_entry: WorkEntry) {
+    const getRef = () => {
+      return doc(collection(this.db, this.auth.user_path + '/sessions'))
+    }
+    const session_ref = session.ref ? session.ref : getRef();
+
+    if (work_entry.ref) {
+      console.log('updating work entry...')
+      await updateDoc(work_entry.ref, WorkEntry.update(work_entry))
+        .catch(error => console.error(error));
+    } else {
+      console.log('pushing work entry..')
+      await addDoc(collection(this.db, session_ref.path + '/work').withConverter(WorkEntry.converter), work_entry)
+      .then((docRef)=>{
+        session.work_entry = docRef
+        work_entry.ref = docRef
+      })
+      .catch(error => console.error(error));
+    }
+
+    if(session.ref){
+      console.log('updating session...')
+      await updateDoc(session_ref, Session.update(session))
+      .catch(error=>console.error(error));
+    }else{
+      console.log('pushing session..')
+      await setDoc(session_ref.withConverter(Session.converter), session)
+      .then(()=>{
+        session.ref = session_ref;
+      })
+      .catch(error => console.error(error));
+    }
+
   }
 }
