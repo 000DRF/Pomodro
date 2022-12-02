@@ -44,7 +44,7 @@ export class LabelsComponent {
   private validate_name(control: FormControl) {
     const value = (control.value || '').trim();
     if (value)
-      return value.length > 12 ? { 'valid_name': true } : null;
+      return value.length > 24 ? { 'valid_name': true } : null;
 
     return { 'validate_name': true };
   }

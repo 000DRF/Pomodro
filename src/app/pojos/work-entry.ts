@@ -7,7 +7,7 @@ export class WorkEntry {
         toFirestore: (work_entry: WorkEntry) => {
             return {
                 time_stamp: work_entry.time_stamp,
-                time: work_entry.time.time,
+                time: work_entry.time.secs,
                 label: work_entry.label
             };
         }, fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
@@ -22,7 +22,7 @@ export class WorkEntry {
     }
     static readonly update = (work_entry: WorkEntry) => {
         return {
-            time: work_entry.time.time,
+            time: work_entry.time.secs,
             label: work_entry.label
         }
     }
@@ -40,10 +40,10 @@ export class WorkEntry {
     }
 
     public get workTime() {
-        return this.time.time;
+        return this.time.secs;
     }
 
     public set workTime(time: number) {
-        this.time.time = time;
+        this.time.secs = time;
     }
 }

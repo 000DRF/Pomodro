@@ -1,10 +1,10 @@
 export class Time {
     private readonly HR = 60 ** 2;
     private readonly MIN = 60;
-    public time: number; // time in seconds;
+    public secs: number; // time in seconds;
 
     constructor(time: number) {
-        this.time = time;
+        this.secs = time;
     }
 
     public toString(): string {
@@ -14,9 +14,9 @@ export class Time {
         const HR = 60 ** 2;
         const MIN = 60;
 
-        const hr = Math.floor(this.time / HR);
-        const min = Math.floor((this.time % HR) / MIN);
-        const sec = this.time % MIN;
+        const hr = Math.floor(this.secs / HR);
+        const min = Math.floor((this.secs % HR) / MIN);
+        const sec = this.secs % MIN;
         let ans = '';
 
         if (hr > 0) {
@@ -30,11 +30,11 @@ export class Time {
 
     public decrement() {
         if (!this.end)
-            this.time--;
+            this.secs--;
     }
 
     public get end(){
-        return this.time === 0; 
+        return this.secs === 0; 
     }
 
 }

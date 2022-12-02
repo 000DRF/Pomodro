@@ -74,4 +74,8 @@ export class SessionService {
     }
   }
 
+  public async save(){
+    if (this.session && this.work_entry)
+      await this.db.pushProgress(this.session, this.work_entry)
+  }
 }

@@ -4,8 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /* @angular/material imports */
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -19,6 +21,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,6 +36,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { AuthService } from './auth.service';
 import { SettingsService } from './settings.service';
 import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './dialogs/dialogs.components';
+import { StatsComponent } from './stats/stats.component';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +48,8 @@ import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './di
     SettingsComponent,
     CreateAccountDialog,
     EditLabelDialog,
-    ForgotPasswordDialog
+    ForgotPasswordDialog,
+    StatsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,14 +60,17 @@ import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './di
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     MatButtonModule,
+    MatButtonToggleModule,
     MatCardModule,
     MatChipsModule,
+    MatDatepickerModule,
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatNativeDateModule,
     MatProgressBarModule,
     MatSliderModule,
     MatSlideToggleModule,

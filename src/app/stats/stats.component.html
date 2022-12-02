@@ -1,0 +1,60 @@
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; ">
+    <div style="flex:1" >
+
+        <mat-button-toggle-group [value]="queryType" aria-label="query type" >
+            <mat-button-toggle value="day" (click)="queryType='day'">Day</mat-button-toggle>
+            <mat-button-toggle value="range" (click)="queryType='range'">Range</mat-button-toggle>
+            <mat-button-toggle value="label" (click)="queryType='label'" *ngIf="labels">Label</mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <div *ngIf="queryType === 'day'">
+            <mat-form-field appearance="fill">
+                <mat-label>Choose a date</mat-label>
+                <input [formControl]="dayControl" matInput [matDatepicker]="picker">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="queryType === 'range'">
+            <mat-form-field appearance="fill">
+                <mat-label>Enter a date range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                    <input [formControl]="startControl" matStartDate placeholder="Start date">
+                    <input [formControl]="endControl" matEndDate placeholder="End date">
+                </mat-date-range-input>
+                <mat-hint>MM/DD/YYYY - MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+
+        <div *ngIf="queryType === 'label'"></div>
+    </div>
+
+
+
+    <div style="flex: 2;">
+        <canvas id="chart" #chart ></canvas>
+    </div>
+
+</div>
+<div style="display: flex; flex-flow: row wrap; max-height: 100px;">
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="view()" [disabled]="loading">View</button>
+</div>
+
+<mat-card-footer>
+    <mat-card-footer *ngIf="loading">
+        <mat-progress-bar mode="query"></mat-progress-bar>
+    </mat-card-footer>
+</mat-card-footer>
+
+<ng-template #day>
+
+</ng-template>
+
+<ng-template #range>
+
+</ng-template>

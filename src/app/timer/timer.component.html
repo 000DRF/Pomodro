@@ -21,7 +21,7 @@
             <span class="spacer"></span>
             <span style="padding: 7px;">
                 <b>Pomodoro #{{this.session.poms + 1}}</b>
-                <i *ngIf="this.session.mode ==='break' && display.time"> Break</i></span>
+                <i *ngIf="this.session.mode ==='break' && display.secs"> Break</i></span>
         </div>
 
         <div class="center">
@@ -29,7 +29,7 @@
                 <div [class]="isPaused? 'flash': ''">{{display.toString()}}</div>
                 <div id="timer-actions">
                     <button mat-fab [color]="this.mode === 'pom'? 'warn':'primary'" aria-label="Pause"
-                        *ngIf="display.time" (click)="isPaused? start(true): pause(true)" [matTooltip]="isPaused ? 'start': 'pause'">
+                        *ngIf="display.secs" (click)="isPaused? start(true): pause(true)" [matTooltip]="isPaused ? 'start': 'pause'">
                         <mat-icon>{{isPaused? 'play_arrow': 'pause'}}</mat-icon>
                     </button>
                     <button mat-fab color="warn" aria-label="Work" (click)="startWork()" *ngIf="validPom" matTooltip="start pomodoro">
@@ -44,7 +44,7 @@
     </div>
 
     <mat-card-footer>
-        <mat-progress-bar mode="determinate" [value]="progress" *ngIf="target.time"
+        <mat-progress-bar mode="determinate" [value]="progress" *ngIf="target.secs"
             [color]="session.mode==='pom'? 'warn':'primary'"></mat-progress-bar>
     </mat-card-footer>
 

@@ -9,8 +9,8 @@ export class Session {
                 work_entry: session.work_entry,
                 mode: session.mode,
                 poms: session.poms,
-                pom: { target: session.pom.target.time, display: session.pom.display.time },
-                break: { target: session.break.target.time, display: session.break.target.time }
+                pom: { target: session.pom.target.secs, display: session.pom.display.secs },
+                break: { target: session.break.target.secs, display: session.break.target.secs }
             };
         },
         fromFirestore: (snapshot: DocumentSnapshot, options: SnapshotOptions) => {
@@ -31,8 +31,8 @@ export class Session {
             work_entry: session.work_entry,
             mode: session.mode,
             poms: session.poms,
-            pom: { target: session.pom.target.time, display: session.pom.display.time },
-            break: { target: session.break.target.time, display: session.break.target.time }
+            pom: { target: session.pom.target.secs, display: session.pom.display.secs },
+            break: { target: session.break.target.secs, display: session.break.target.secs }
         };
     }
     public time_stamp: Timestamp;

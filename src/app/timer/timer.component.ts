@@ -58,7 +58,7 @@ export class TimerComponent {
       if (this.mode === 'pom' && this.workEntry)
         this.workEntry.workTime++;
 
-      if ((this.target.time - this.display.time) % 60 === 0)
+      if ((this.target.secs - this.display.secs) % 60 === 0)
         this.save()
 
       if (this.display.end) {
@@ -90,9 +90,9 @@ export class TimerComponent {
 
     if (this.validPom) {
       this.session.mode = 'pom';
-      if (!this.display.time) {
-        this.session.pom.target.time = this.settings.pom * 60;
-        this.session.pom.display.time = this.settings.pom * 60;
+      if (!this.display.secs) {
+        this.session.pom.target.secs = this.settings.pom * 60;
+        this.session.pom.display.secs = this.settings.pom * 60;
       }
       this.start();
     }
@@ -109,24 +109,23 @@ export class TimerComponent {
   }
 
   public get progress() {
-    let progress = this.target.time - this.display.time;
-    return (progress / this.target.time) * 100
+    let progress = this.target.secs - this.display.secs;
+    return (progress / this.target.secs) * 100
   }
 
   public get validBreak(): boolean {
-    return (this.session.break.target.time > 0) && this.mode == 'pom' && this.isPaused;
+    return (this.session.break.target.secs > 0) && this.mode == 'pom' && this.isPaused;
   }
 
   public get validPom(): boolean {
-    return this.isPaused && (!this.display.time || this.mode === 'break')
+    return this.isPaused && (!this.display.secs || this.mode === 'break')
   }
 
   private async save() {
-    if (this.session && this.session_service.work_entry)
-      await this.db.pushProgress(this.session, this.session_service.work_entry)
+    await this.session_service.save()
 
   }
-  
+
   get validWorkEntry() {
     if (this.workEntry)
       if (this.label)
@@ -151,15 +150,15 @@ export class TimerComponent {
         added_break = (this.settings.break * 60)
       else
         added_break = (this.settings.short_break * 60)
-      this.session.break.target.time += added_break;
-      this.session.break.display.time += added_break
+      this.session.break.target.secs += added_break;
+      this.session.break.display.secs += added_break
 
       if (this.settings.auto_break)
         this.startBreak();
     }
     else {
-      this.session.break.target.time = 0;
-      this.session.break.display.time = 0;
+      this.session.break.target.secs = 0;
+      this.session.break.display.secs = 0;
       if (this.settings.auto_pom)
         this.startWork();
     }
