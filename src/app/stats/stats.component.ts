@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import Chart from 'chart.js/auto'
+
+import { Chart } from 'chart.js/auto';
 
 import { DbService } from '../db.service';
 import { Label } from '../pojos/label';
@@ -18,13 +19,13 @@ export interface Data {
   styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent {
-  @ViewChild('chart') private canvas: any;
+  @ViewChild('chartCanvas') private canvas: any;
   private context: any;
-  private chart !: any;
+  public chart !: any;
 
 
   public range = false;
-  public queryType: 'day' | 'range' | 'label' = 'day';
+  public queryType: 'day' | 'range' = 'day';
   public loading: boolean = false;
   public data: Data = {}
 
@@ -32,7 +33,9 @@ export class StatsComponent {
   public startControl = new FormControl(null, Validators.required)
   public endControl = new FormControl(null, Validators.required)
 
-  constructor(private session_service: SessionService, private db: DbService) { }
+  constructor(private session_service: SessionService, private db: DbService) {
+
+  }
 
   public get labels(): Label[] {
     return this.session_service.labels;
@@ -45,9 +48,10 @@ export class StatsComponent {
     else
       return false /* Label control*/
   }
+
   public async view() {
     if (this.validForm) {
-      this.session_service.save();
+      await this.session_service.save();
       this.loading = true;
       let startDate: Date = new Date();
       let endDate: Date = new Date();
@@ -66,12 +70,14 @@ export class StatsComponent {
       this.data = await (this.db.pullData(startDate, endDate));
       console.log('db function returned', this.data)
       this.loading = false;
-      this.displayChart();
+      if(Object.keys(this.data).length > 0)
+        this.displayChart();
     }
-
   }
 
   private displayChart() {
+    if (this.chart)
+      this.chart.destroy();
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
 
@@ -85,8 +91,6 @@ export class StatsComponent {
       }]
     };
 
-    if (this.chart)
-      this.chart.destroy();
     this.chart = new Chart(context, {
       type: 'pie',
       data: data,
@@ -115,7 +119,6 @@ export class StatsComponent {
       }
     }
     )
-
   }
 
   private get labelNames(): string[] {

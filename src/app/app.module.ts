@@ -6,12 +6,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -21,7 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatTreeModule } from '@angular/material/tree';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -37,7 +39,7 @@ import { AuthService } from './auth.service';
 import { SettingsService } from './settings.service';
 import { CreateAccountDialog, EditLabelDialog, ForgotPasswordDialog } from './dialogs/dialogs.components';
 import { StatsComponent } from './stats/stats.component';
-
+import { ToDoComponent } from './to-do/to-do.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,8 @@ import { StatsComponent } from './stats/stats.component';
     CreateAccountDialog,
     EditLabelDialog,
     ForgotPasswordDialog,
-    StatsComponent
+    StatsComponent,
+    ToDoComponent
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { StatsComponent } from './stats/stats.component';
     MatButtonModule,
     MatButtonToggleModule,
     MatCardModule,
+    MatCheckboxModule,
     MatChipsModule,
     MatDatepickerModule,
     MatDialogModule,
@@ -77,7 +81,8 @@ import { StatsComponent } from './stats/stats.component';
     MatSnackBarModule,
     MatTabsModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTreeModule
   ],
   providers: [AuthService, SettingsService],
   bootstrap: [AppComponent]

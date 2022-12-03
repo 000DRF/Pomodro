@@ -17,22 +17,11 @@ export class LabelsComponent {
   public label_control: FormControl;
   public edit!: boolean;
   public form_group!: FormGroup;
-  public loading: boolean = true;
   constructor(private db: DbService, private session: SessionService, public dialog: MatDialog) {
-    this.initLabels();
+    this.initFormGroup();
     this.label_control = new FormControl(this.session.label, [Validators.required, this.validate_label]);
   }
-
-  private async initLabels() {
-    const querySnapshot = await this.db.pullLabels();
-    this.labels = [];
-    querySnapshot.forEach((doc) => {
-      this.labels.push(doc.data());
-    });
-    this.initFormGroup()
-    this.loading = false;
-  }
-
+  
   private initFormGroup() {
     this.form_group = new FormGroup({
       name: new FormControl('', [Validators.required, this.validate_name]),

@@ -1,41 +1,35 @@
-<span *ngIf="!loading; else loading_bar">
-    <mat-slide-toggle [checked]="edit" color="primary" (change)="edit =!edit" style="margin-left: 2%; margin-top: 2%;">
-        Edit</mat-slide-toggle>
+<mat-slide-toggle [checked]="edit" color="primary" (change)="edit =!edit" style="margin-left: 2%; margin-top: 2%;">
+    Edit</mat-slide-toggle>
 
-    <span *ngIf="edit; else select" style="display: flex; justify-content: center;">
-        <mat-form-field appearance="fill" style="width: 100%; margin: 2%;">
-            <mat-label>Edit labels</mat-label>
-            <mat-chip-grid #chipGrid aria-label="Enter label" [disabled]="form_group.disabled">
-                <mat-chip-row *ngFor="let label of labels" (removed)="remove(label)" (click)="editLabel(label)">
-                    <mat-icon matChipAvatar [style.color]="label.color">lens</mat-icon>
-                    {{label.name}}
-                    <button matChipRemove [attr.aria-label]="'remove ' + label.name">
-                        <mat-icon>cancel</mat-icon>
-                    </button>
-                </mat-chip-row>
-            </mat-chip-grid>
-            <form [formGroup]="form_group" style="width:100%; margin-top: 30px">
-                <span style="display: flex;">
-                    <input matInput formControlName="color" type="color" style="width: 50px; height: 40px;">
-                    <input matInput formControlName="name" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                        placeholder="Label name... (1 - 24) characters" [matChipInputFor]="chipGrid"
-                        (matChipInputTokenEnd)="add()" style="flex: 1;">
-                </span>
-            </form>
-        </mat-form-field>
-    </span>
-
-    <span style="display: flex; margin: 2%;">
-        <span class="spacer"></span>
-        <button mat-raised-button color="primary" *ngIf="!edit" [disabled]="label_control.invalid" (click)="selectLabel()">Done</button>
-    </span>
+<span *ngIf="edit; else select" style="display: flex; justify-content: center;">
+    <mat-form-field appearance="fill" style="width: 100%; margin: 2%;">
+        <mat-label>Edit labels</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter label" [disabled]="form_group.disabled">
+            <mat-chip-row *ngFor="let label of labels" (removed)="remove(label)" (click)="editLabel(label)">
+                <mat-icon matChipAvatar [style.color]="label.color">lens</mat-icon>
+                {{label.name}}
+                <button matChipRemove [attr.aria-label]="'remove ' + label.name">
+                    <mat-icon>cancel</mat-icon>
+                </button>
+            </mat-chip-row>
+        </mat-chip-grid>
+        <form [formGroup]="form_group" style="width:100%; margin-top: 30px">
+            <span style="display: flex;">
+                <input matInput formControlName="color" type="color" style="width: 50px; height: 40px;">
+                <input matInput formControlName="name" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                    placeholder="Label name... (1 - 24) characters" [matChipInputFor]="chipGrid"
+                    (matChipInputTokenEnd)="add()" style="flex: 1;">
+            </span>
+        </form>
+    </mat-form-field>
 </span>
 
-<ng-template #loading_bar>
-    <mat-card-footer>
-        <mat-progress-bar mode="query"></mat-progress-bar>
-    </mat-card-footer>
-</ng-template>
+<span style="display: flex; margin: 2%;">
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" *ngIf="!edit" [disabled]="label_control.invalid"
+        (click)="selectLabel()">Done</button>
+</span>
+
 
 <ng-template #select>
     <div>

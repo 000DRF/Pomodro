@@ -24,34 +24,31 @@ export class SessionService {
   private async init_session() {
     const querySnapshot = await this.db.pullSession();
 
-    querySnapshot.forEach(async (doc) => {
+    for (const doc of querySnapshot.docs) {
       this.session = doc.data();
-      // Pull work entry
-      if (this.session.work_entry)
-        await this.db.pullWorkEntry(this.session.work_entry)
-          .then(async (work_entry) => {
-            if (work_entry)
-              this.work_entry = work_entry;
-            // Pull label
-            if (this.work_entry)
-              await this.db.pullLabel(this.work_entry.label)
-                .then((label) => {
-                  if (label)
-                    this._label = label;
-                })
-                .catch(error => {
-                  console.error(error);
-                  this.work_entry = new WorkEntry();
-                  this.session.work_entry = undefined;
-                })
-          })
-          .catch(error => console.error(error))
-    });
+      if (this.session.work_entry) {
+        let work_entry = await this.db.pullWorkEntry(this.session.work_entry)
 
-    // Session not found in DB. Create a new one.
-    if (this.session === undefined) {
-      this.session = new Session();
+        if (work_entry.time.secs > 0) {
+          // Pull label
+          let label = await this.db.pullLabel(work_entry.label)
+          if (label) {
+            this._label = label;
+            this.work_entry = work_entry;
+          }
+          else {
+            this.work_entry = new WorkEntry();
+            this.session.work_entry = undefined;
+          }
+        }
+      }
     }
+    // Session not found in DB. Create a new one.
+    if (this.session === undefined)
+      this.session = new Session();
+
+    //pull labels
+    this.labels = await this.db.pullLabels();
 
     this.loading = false;
   }
@@ -74,7 +71,7 @@ export class SessionService {
     }
   }
 
-  public async save(){
+  public async save() {
     if (this.session && this.work_entry)
       await this.db.pushProgress(this.session, this.work_entry)
   }

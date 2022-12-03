@@ -38,7 +38,7 @@ export class DbService {
   }
 
   public async pullData(sod: Date, eod: Date) {
-    let data :Data = {};
+    let data: Data = {};
     this.setTime(sod, eod);
 
     const sessionsRef = collection(this.db, this.auth.user_path + '/sessions');
@@ -60,7 +60,7 @@ export class DbService {
           const doc = await getDoc(work.label.withConverter(Label.converter))
           const label = doc.data();
 
-          if (label){
+          if (label) {
             console.log({ label: label, time: work.time })
             data[label.ref.id] = { label: label, time: work.time }
           }
@@ -70,10 +70,18 @@ export class DbService {
     return data;
   }
 
-  public pullLabels() {
+  public async pullLabels() : Promise<Label[]>{
+    let labels :Label[] = [];
+
     const labelsRef = collection(this.db, this.auth.user_path + '/labels');
     const q = query(labelsRef, orderBy("name", "asc"), where('removed', '==', false)).withConverter(Label.converter);
-    return getDocs(q);
+    const querySnapshot = await getDocs(q);
+
+    for(const doc of querySnapshot.docs){
+      labels.push(doc.data());
+    }
+
+    return labels;
   }
 
   public async pullLabel(label_ref: DocumentReference) {
@@ -81,9 +89,10 @@ export class DbService {
     return doc.get('removed') ? undefined : doc.data();
   }
 
-  public async pullWorkEntry(work_entry_ref: DocumentReference) {
+  public async pullWorkEntry(work_entry_ref: DocumentReference): Promise<WorkEntry> {
     const doc = await getDoc(work_entry_ref.withConverter(WorkEntry.converter))
-    return doc.data()
+    let data = doc.data()
+    return data? data: new WorkEntry();
   }
 
   public async findWorkEntry(path: string, label_ref: DocumentReference) {
@@ -132,34 +141,35 @@ export class DbService {
   }
 
   public async pushProgress(session: Session, work_entry: WorkEntry) {
-    const getRef = () => {
-      return doc(collection(this.db, this.auth.user_path + '/sessions'))
-    }
-    const session_ref = session.ref ? session.ref : getRef();
+    // Provides DocumentReference if not provided. (New push)
+    const session_ref = session.ref ? session.ref : doc(collection(this.db, this.auth.user_path + '/sessions'));
 
+    // Work entry has referenced if it already exists in DB
     if (work_entry.ref) {
       console.log('updating work entry...')
       await updateDoc(work_entry.ref, WorkEntry.update(work_entry))
         .catch(error => console.error(error));
-    } else {
+    } else { // New push
       console.log('pushing work entry..')
-      await addDoc(collection(this.db, session_ref.path + '/work').withConverter(WorkEntry.converter), work_entry)
-        .then(async (docRef) => {
-          session.work_entry = docRef
-          work_entry.ref = docRef
-          await updateDoc(work_entry.label, {
-            refs: arrayUnion(docRef)
+      if (work_entry.time.secs > 0)
+        await addDoc(collection(this.db, session_ref.path + '/work').withConverter(WorkEntry.converter), work_entry)
+          .then(async (docRef) => {
+            session.work_entry = docRef
+            work_entry.ref = docRef
+            await updateDoc(work_entry.label, {
+              refs: arrayUnion(docRef)
+            })
+              .catch(error => console.error(error));
           })
-            .catch(error => console.error(error));
-        })
-        .catch(error => console.error(error));
+          .catch(error => console.error(error));
     }
 
+    // Session has reference if previously pushed
     if (session.ref) {
       console.log('updating session...')
       await updateDoc(session_ref, Session.update(session))
         .catch(error => console.error(error));
-    } else {
+    } else { // New push, uses session_ref
       console.log('pushing session..')
       await setDoc(session_ref.withConverter(Session.converter), session)
         .then(() => {

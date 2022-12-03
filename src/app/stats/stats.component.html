@@ -1,10 +1,9 @@
 <div style="display: flex; flex-wrap: wrap; justify-content: space-between; ">
-    <div style="flex:1" >
+    <div style="flex:1; margin-bottom: 12px;">
 
-        <mat-button-toggle-group [value]="queryType" aria-label="query type" >
+        <mat-button-toggle-group [value]="queryType" aria-label="query type">
             <mat-button-toggle value="day" (click)="queryType='day'">Day</mat-button-toggle>
             <mat-button-toggle value="range" (click)="queryType='range'">Range</mat-button-toggle>
-            <mat-button-toggle value="label" (click)="queryType='label'" *ngIf="labels">Label</mat-button-toggle>
         </mat-button-toggle-group>
 
         <div *ngIf="queryType === 'day'">
@@ -30,17 +29,16 @@
             </mat-form-field>
         </div>
 
-        <div *ngIf="queryType === 'label'"></div>
     </div>
 
-
-
     <div style="flex: 2;">
-        <canvas id="chart" #chart ></canvas>
+        <canvas id="chart" [style.background-color]="(chart && chart.attached)? 'white': 'rgba(0, 0, 0, 0)'"
+            #chartCanvas></canvas>
     </div>
 
 </div>
-<div style="display: flex; flex-flow: row wrap; max-height: 100px;">
+
+<div style="display: flex; flex-flow: row wrap; max-height: 100px; margin-top: 12px;">
     <span class="spacer"></span>
     <button mat-raised-button color="primary" (click)="view()" [disabled]="loading">View</button>
 </div>

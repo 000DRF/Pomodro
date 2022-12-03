@@ -15,10 +15,10 @@ export class AppComponent {
   }
 
   public get userLoaded() {
-    return this.auth.userType !== 'undefined'
+    return this.auth.userType !== 'undefined';
   }
 
   public get signedIn() {
-    return this.auth.userType === 'object'
+    return this.auth.userType === 'object';
   }
 }
