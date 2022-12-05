@@ -157,9 +157,10 @@ export class TimerComponent {
     return this.session_service.validWorkEntry;
   }
 
-  public changeLabel() {
+  public async changeLabel() {
     if (this.isPaused) {
-      this.save();
+      if (this.workEntry && this.workEntry.workTime > 0)
+        await this.save();
       this.session_service.work_entry = undefined;
     }
   }
@@ -182,7 +183,7 @@ export class TimerComponent {
    */
   private notify() {
     if (this.settings.notifications) {
-      let msg = this.mode ==='pom'? `You've finished Pomodoro #${this.session.poms+1}!`: 'Your break is up!';
+      let msg = this.mode === 'pom' ? `You've finished Pomodoro #${this.session.poms + 1}!` : 'Your break is up!';
       let img = '../assets/img/pomodoro.png';
       if (!("Notification" in window)) {
         // Check if the browser supports notifications

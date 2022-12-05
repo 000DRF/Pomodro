@@ -141,6 +141,8 @@ export class DbService {
   }
 
   public async pushProgress(session: Session, work_entry: WorkEntry) {
+    console.log('[db]:',work_entry)
+
     // Provides DocumentReference if not provided. (New push)
     const session_ref = session.ref ? session.ref : doc(collection(this.db, this.auth.user_path + '/sessions'));
 
