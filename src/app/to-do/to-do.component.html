@@ -1,1 +1,48 @@
-<p>to-do works!</p>
+<div *ngIf="validWorkEntry; else warn">
+    <mat-tab-group color="primary"  class='prevent-select'#tabs>
+        <mat-tab label="Tasks">
+            <div class="tab">
+                <div *ngFor="let task of tasks; let i = index">
+
+                    <button [disabled]="pushing" mat-icon-button color="primary" aria-label="Remove task"
+                        (click)="remove(i, false)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+                    <mat-checkbox [disabled]="pushing" [checked]="false" (click)="change(i, taskField)" [value]="task"
+                        #taskField>
+                        {{taskField.value}}
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Completed">
+            <div class="tab">
+                <div *ngFor="let task of completed; let i = index">
+                    <button [disabled]="pushing" mat-icon-button color="primary" aria-label="Remove task"
+                        (click)="remove(i, true)">
+                        <mat-icon>remove</mat-icon>
+                    </button>
+
+                    <mat-checkbox [disabled]="pushing" [checked]="true" (click)="change(i, taskField)" color="primary"
+                        [value]="task" #taskField>
+                        <s><i>{{taskField.value}}</i></s>
+                    </mat-checkbox>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+    <mat-form-field *ngIf="showInput" color="primary" appearance="outline">
+        <mat-label>New task</mat-label>
+        <input [disabled]="pushing" matInput placeholder="Task (1-24 characters)"
+            (keydown.enter)="addTask(input.value); input.value=''" #input />
+    </mat-form-field>
+    <button mat-icon-button aria-label="Toggle task input" (click)="showInput = !showInput">
+        <mat-icon>{{showInput? 'chevron_left':'add_box'}}</mat-icon>
+    </button>
+</div>
+
+<ng-template #warn>
+    <div style="width: 100%;" class="prevent-select center">
+        Please select a label <mat-icon>error</mat-icon>
+    </div>
+</ng-template>

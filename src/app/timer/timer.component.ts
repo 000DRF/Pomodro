@@ -154,10 +154,7 @@ export class TimerComponent {
   }
 
   get validWorkEntry() {
-    if (this.workEntry)
-      if (this.label)
-        return this.label.ref.id === this.workEntry.label.id;
-    return false;
+    return this.session_service.validWorkEntry;
   }
 
   public changeLabel() {

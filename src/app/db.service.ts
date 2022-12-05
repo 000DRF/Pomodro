@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { addDoc, arrayUnion, collection, doc, docSnapshots, DocumentReference, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import { addDoc, arrayRemove, arrayUnion, collection, doc, docSnapshots, DocumentReference, Firestore, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { deleteDoc } from '@firebase/firestore';
 import { AuthService } from './auth.service';
 import { Label } from './pojos/label';
@@ -70,14 +70,14 @@ export class DbService {
     return data;
   }
 
-  public async pullLabels() : Promise<Label[]>{
-    let labels :Label[] = [];
+  public async pullLabels(): Promise<Label[]> {
+    let labels: Label[] = [];
 
     const labelsRef = collection(this.db, this.auth.user_path + '/labels');
     const q = query(labelsRef, orderBy("name", "asc"), where('removed', '==', false)).withConverter(Label.converter);
     const querySnapshot = await getDocs(q);
 
-    for(const doc of querySnapshot.docs){
+    for (const doc of querySnapshot.docs) {
       labels.push(doc.data());
     }
 
@@ -92,7 +92,7 @@ export class DbService {
   public async pullWorkEntry(work_entry_ref: DocumentReference): Promise<WorkEntry> {
     const doc = await getDoc(work_entry_ref.withConverter(WorkEntry.converter))
     let data = doc.data()
-    return data? data: new WorkEntry();
+    return data ? data : new WorkEntry();
   }
 
   public async findWorkEntry(path: string, label_ref: DocumentReference) {
@@ -178,5 +178,22 @@ export class DbService {
         .catch(error => console.error(error));
     }
 
+  }
+
+
+  async addTask(label_ref: DocumentReference, task: string) {
+    await updateDoc(label_ref, { ['todo.tasks']: arrayUnion(task) });
+  }
+
+  async rmTask(label_ref: DocumentReference, task: string, from: 'tasks' | 'completed') {
+    await updateDoc(label_ref, { ['todo.' + from]: arrayRemove(task) });
+  }
+
+  async moveTask(label_ref: DocumentReference, task: string, from: 'tasks' | 'completed') {
+    await updateDoc(
+      label_ref, {
+      ['todo.' + from]: arrayRemove(task),
+      ['todo.' + (from === 'tasks' ? 'completed' : 'tasks')]: arrayUnion(task)
+    });
   }
 }

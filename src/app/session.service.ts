@@ -75,4 +75,10 @@ export class SessionService {
     if (this.session && this.work_entry)
       await this.db.pushProgress(this.session, this.work_entry)
   }
+
+   get validWorkEntry() {
+    if (this.work_entry && this._label)
+        return this.label.ref.id === this.work_entry.label.id;
+    return false;
+  }
 }
