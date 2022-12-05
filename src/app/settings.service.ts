@@ -62,10 +62,8 @@ export class SettingsService {
           console.error(error);
         });
 
-        this.updating = false;
-        this.form_group.enable();        
-    } else {
-      console.log('0 changes..')
+      this.updating = false;
+      this.form_group.enable();
     }
   }
 

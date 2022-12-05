@@ -20,9 +20,19 @@ export class AuthService {
       this.user = user;
     });
   }
-  public get user_path(){
-    return this.user? 'users/'+ this.user.uid: "";
+
+  public get user_path() {
+    return this.user ? 'users/' + this.user.uid : "";
   }
+
+  public get isAnonymous():boolean{
+    return this.user? this.user.isAnonymous: true;
+  }
+
+  public signOut(){
+    this.auth.signOut();
+  }
+
   /**
    * User is signed in anonymously.
    */
@@ -56,7 +66,8 @@ export class AuthService {
   }
 
   /**
-   * 
+   * Sends account verification email to user. 
+   * @param user 
    */
   public async verifyEmail(user: User) {
     await sendEmailVerification(user)

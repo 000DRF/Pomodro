@@ -1,8 +1,8 @@
-<mat-slide-toggle [checked]="edit" color="primary" (change)="edit =!edit" style="margin-left: 2%; margin-top: 2%;">
+<mat-slide-toggle [checked]="edit" color="primary" (change)="edit =!edit" id="edit-toggle">
     Edit</mat-slide-toggle>
 
-<span *ngIf="edit; else select" style="display: flex; justify-content: center;">
-    <mat-form-field appearance="fill" style="width: 100%; margin: 2%;">
+<span *ngIf="edit; else select" id="edit-labels">
+    <mat-form-field appearance="fill" id="label-edit-section">
         <mat-label>Edit labels</mat-label>
         <mat-chip-grid #chipGrid aria-label="Enter label" [disabled]="form_group.disabled">
             <mat-chip-row *ngFor="let label of labels" (removed)="remove(label)" (click)="editLabel(label)">
@@ -13,9 +13,9 @@
                 </button>
             </mat-chip-row>
         </mat-chip-grid>
-        <form [formGroup]="form_group" style="width:100%; margin-top: 30px">
+        <form [formGroup]="form_group" id="label-input">
             <span style="display: flex;">
-                <input matInput formControlName="color" type="color" style="width: 50px; height: 40px;">
+                <input matInput formControlName="color" type="color" id="color-input">
                 <input matInput formControlName="name" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     placeholder="Label name... (1 - 24) characters" [matChipInputFor]="chipGrid"
                     (matChipInputTokenEnd)="add()" style="flex: 1;">
@@ -24,7 +24,7 @@
     </mat-form-field>
 </span>
 
-<span style="display: flex; margin: 2%;">
+<span id="actions">
     <span class="spacer"></span>
     <button mat-raised-button color="primary" *ngIf="!edit" [disabled]="label_control.invalid"
         (click)="selectLabel()">Done</button>

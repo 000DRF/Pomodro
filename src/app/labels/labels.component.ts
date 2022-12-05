@@ -13,22 +13,20 @@ import { SessionService } from '../session.service';
   styleUrls: ['./labels.component.scss']
 })
 export class LabelsComponent {
-  readonly separatorKeysCodes = [ENTER];
+  readonly separatorKeysCodes = [ENTER]; // pressing enter submits this.form_group
   public label_control: FormControl;
-  public edit!: boolean;
-  public form_group!: FormGroup;
+  public edit: boolean; // Prompts user to select label 
+  public form_group: FormGroup;
   constructor(private db: DbService, private session: SessionService, public dialog: MatDialog) {
-    this.initFormGroup();
-    this.label_control = new FormControl(this.session.label, [Validators.required, this.validate_label]);
-  }
-  
-  private initFormGroup() {
     this.form_group = new FormGroup({
       name: new FormControl('', [Validators.required, this.validate_name]),
       color: new FormControl(this.randomColor, Validators.required)
     })
+
     this.edit = this.labels.length === 0;
+    this.label_control = new FormControl(this.session.label, [Validators.required, this.validate_label]);
   }
+
 
   private validate_name(control: FormControl) {
     const value = (control.value || '').trim();
@@ -41,7 +39,9 @@ export class LabelsComponent {
   private validate_label(control: FormControl) {
     return (control.value instanceof Label) ? null : { 'unselected': true };
   }
+
   /**
+   * Initializes form with random color.
    * @src https://css-tricks.com/snippets/javascript/random-hex-color/
    * @return random hex color
    */
@@ -50,7 +50,9 @@ export class LabelsComponent {
     return '#' + Math.floor(Math.random() * 16777215).toString(16);
   }
 
-
+  /**
+   * Adds new label to DB.
+   */
   public async add() {
     if (this.form_group.valid) {
       this.form_group.disable();
@@ -60,7 +62,7 @@ export class LabelsComponent {
           label.ref = docRef;
           this.labels.splice(this.getInsertIndex(label.name), 0, label)
         })
-        .catch(error => console.log(error))
+        .catch(error => console.error(error))
 
       this.form_group.enable();
     }
@@ -68,6 +70,10 @@ export class LabelsComponent {
     this.form_group.get('color')?.setValue(this.randomColor);
   }
 
+  /**
+   * Removes label provided from list & DB.
+   * @param label 
+   */
   public async remove(label: Label) {
     this.form_group.disable();
     await this.db.rmLabel(label);
@@ -78,6 +84,11 @@ export class LabelsComponent {
     this.form_group.enable();
   }
 
+  /**
+   * Returns index of list where new label is to be inserted.
+   * @param name of Label to be inserted
+   * @returns 
+   */
   private getInsertIndex(name: string): number {
     let start = 0;
     let finish = this.labels.length - 1;
@@ -94,7 +105,11 @@ export class LabelsComponent {
 
     return start;
   }
-
+  
+  /**
+   * Opens dialog prompting user to update selected label.
+   * @param label 
+   */
   public editLabel(label: Label) {
     const dialogRef = this.dialog.open(EditLabelDialog, {
       data: {
@@ -115,16 +130,25 @@ export class LabelsComponent {
 
   }
 
+  /**
+   * Label is selected and added to session.
+   */
   public selectLabel() {
     if (this.label_control.valid)
       this.session.setLabel(this.label_control.value);
   }
-
-  public get labels(): Label[]{
+  
+  /**
+   * Retrieves list of labels from session service.
+   */
+  public get labels(): Label[] {
     return this.session.labels
   }
 
-  public set labels(labels: Label[]){
+  /**
+   * Edits list of labels from session service. 
+   */
+  public set labels(labels: Label[]) {
     this.session.labels = labels;
   }
 }

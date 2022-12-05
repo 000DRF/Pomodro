@@ -51,7 +51,9 @@ export class CreateAccountDialog {
   }
 }
 
-
+/**
+ * @title Edit Label Dialog
+ */
 @Component({
   selector: 'edit-label',
   templateUrl: './templates/edit-label.html'

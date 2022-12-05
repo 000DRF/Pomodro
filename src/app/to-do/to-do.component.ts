@@ -20,12 +20,15 @@ export class ToDoComponent {
   get tasks() {
     return this.session_service.label.todo.tasks;
   }
+
   set tasks(val: string[]) {
     this.session_service.label.todo.tasks = val;
   }
+
   get completed() {
     return this.session_service.label.todo.completed;
   }
+  
   set completed(val: string[]) {
     this.session_service.label.todo.completed = val;
 
@@ -34,16 +37,22 @@ export class ToDoComponent {
   get validWorkEntry(): boolean {
     return this.session_service.validWorkEntry;
   }
+
   get showInput(): boolean {
     return this._show_input
   }
+
   private get label() {
     return this.session_service.label.ref;
   }
+
   set showInput(val: boolean) {
     this._show_input = val;
   }
-
+  /**
+   * Adds task to DB, then tasks list.  
+   * @param input 
+   */
   async addTask(input: string) {
     const name = (input || '').trim();
     if (this.validName(name)) {
@@ -56,6 +65,11 @@ export class ToDoComponent {
     }
   }
 
+  /**
+   * Moves task from: tasks -> completed (or) completed -> task
+   * @param i index
+   * @param check_box checkbox clicked
+   */
   async change(i: number, check_box: MatCheckbox) {
     this.pushing = true;
     if (check_box.checked) { // completed -> tasks 
@@ -83,7 +97,11 @@ export class ToDoComponent {
     }
     this.pushing = false;
   }
-
+  /**
+   * Removes task from appropriate list and DB.
+   * @param i index
+   * @param checked 
+   */
   async remove(i: number, checked: boolean) {
     this.pushing = true;
     if (checked) {
@@ -100,6 +118,11 @@ export class ToDoComponent {
     this.pushing = false;
   }
 
+  /**
+   * Validates task entry by ensuring correct length & uniqueness.
+   * @param name task to be added
+   * @returns 
+   */
   private validName(name: string): boolean {
     if (name) {
       if (name.length <= 24)

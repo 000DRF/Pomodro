@@ -61,7 +61,6 @@ export class DbService {
           const label = doc.data();
 
           if (label) {
-            console.log({ label: label, time: work.time })
             data[label.ref.id] = { label: label, time: work.time }
           }
         }
@@ -96,7 +95,7 @@ export class DbService {
   }
 
   public async findWorkEntry(path: string, label_ref: DocumentReference) {
-    console.log('looking for ref')
+    console.log('looking for ref...')
     const workEntries = collection(this.db, path + '/work')
     const q = query(workEntries, where('label', '==', label_ref)).withConverter(WorkEntry.converter)
     return getDocs(q);
@@ -141,7 +140,6 @@ export class DbService {
   }
 
   public async pushProgress(session: Session, work_entry: WorkEntry) {
-    console.log('[db]:',work_entry)
 
     // Provides DocumentReference if not provided. (New push)
     const session_ref = session.ref ? session.ref : doc(collection(this.db, this.auth.user_path + '/sessions'));

@@ -18,26 +18,38 @@ export class TimerComponent {
     });
   }
 
+  /**
+   * True if session service is doing work.
+   */
   public get loading(): boolean {
     return this.session_service.loading;
   }
 
+  /**
+   * Gets selected label from session service.
+   */
   public get label(): Label {
     return this.session_service.label
   }
 
+  /**
+   * Gets current mode from session service.
+   */
   public get mode(): 'pom' | 'break' {
     return this.session.mode;
   }
 
+  /**
+   * Gets WorkEntry from session service.
+   */
   public get workEntry() {
     return this.session_service.work_entry;
   }
 
-  public get labelSelected(): boolean {
-    return (this.session_service.label !== undefined)
-  }
-
+  /**
+   * Handles pause event.
+   * @param pauseBtn 
+   */
   public pause(pauseBtn: boolean = false) {
     if (this.settings.sound && pauseBtn)
       new Audio('../assets/sounds/pause.wav').play();
@@ -45,16 +57,23 @@ export class TimerComponent {
     this.interval = undefined;
   }
 
+  /**
+   * True if timer is paused. 
+   */
   public get isPaused(): boolean {
     return this.interval === undefined;
   }
 
+  /**
+   * Handles the start timer event.
+   * Plays sound if called by pause button.
+   * @param pauseBtn If function was called by pauseBtn.
+   */
   public start(pauseBtn: boolean = false) {
     if (this.settings.sound && pauseBtn)
       new Audio('../assets/sounds/start.wav').play();
 
     this.interval = setInterval(() => {
-      console.log('display in interval..', this.session.break.display.secs, this.mode)
       this.display.decrement();
       if (this.mode === 'pom' && this.workEntry)
         this.workEntry.workTime++;
@@ -67,7 +86,9 @@ export class TimerComponent {
 
     }, 1000)
   }
-
+  /**
+   * Handles event when timer runs out of time.
+   */
   private handleEnd() {
     this.pause();
     this.notify();
@@ -76,41 +97,56 @@ export class TimerComponent {
       this.session.poms++;
 
       let added_break: number = 0;
-      if ((this.session.poms % this.settings.cost) === 0)
+      if ((this.session.poms % this.settings.cost) === 0) // Long break
         added_break = (this.settings.break * 60)
       else
-        added_break = (this.settings.short_break * 60)
+        added_break = (this.settings.short_break * 60) // Short break
 
       this.session.break.target.secs += added_break;
       this.session.break.display.secs += added_break;
-      console.log('target', this.session.break.target.secs,
-        'display', this.session.break.display.secs)
+
       if (this.settings.auto_break)
         this.startBreak();
     }
-    else {
+    else { // Break time has run out
       this.session.break.target.secs = 0;
       this.session.break.display.secs = 0;
       if (this.settings.auto_pom)
         this.startWork();
     }
   }
+
+  /**
+   * Gets session Object from session service. 
+   */
   public get session() {
     return this.session_service.session;
   }
 
+  /**
+   * Gets settings object form settings service.
+   */
   public get settings() {
     return this.settings_service.settings;
   }
 
+  /**
+   * gets display Time from session, based on current mode.
+   */
   public get display() {
     return this.session[this.mode].display
   }
 
+  /**
+   * Gets target Time from session, based on current mode.
+   */
   public get target() {
     return this.session[this.mode].target
   }
 
+  /**
+   * Starts Pomodoro timer.
+   */
   public startWork() {
     if (this.settings.sound)
       new Audio('../assets/sounds/start_pom.wav').play();
@@ -125,6 +161,9 @@ export class TimerComponent {
     }
   }
 
+  /**
+   * Starts Break timer. 
+   */
   public startBreak() {
     if (this.settings.sound)
       new Audio('../assets/sounds/start_break.wav').play();
@@ -135,19 +174,31 @@ export class TimerComponent {
     }
   }
 
+  /**
+   * Feeds progress to mat-progress-bar component .
+   */
   public get progress() {
     let progress = this.target.secs - this.display.secs;
     return (progress / this.target.secs) * 100
   }
 
+  /**
+   * True if break should be an option.
+   */
   public get validBreak(): boolean {
     return (this.session.break.target.secs > 0) && this.mode == 'pom' && this.isPaused;
   }
 
+  /**
+   * True if pomodoro should be an option.
+   */
   public get validPom(): boolean {
     return this.isPaused && (!this.display.secs || this.mode === 'break')
   }
 
+  /**
+   * Saves progress by calling save() form session service. 
+   */
   private async save() {
     await this.session_service.save()
 
@@ -157,6 +208,9 @@ export class TimerComponent {
     return this.session_service.validWorkEntry;
   }
 
+  /**
+   * Prompts user to change label by making work entry invalid.
+   */
   public async changeLabel() {
     if (this.isPaused) {
       if (this.workEntry && this.workEntry.workTime > 0)
@@ -165,6 +219,9 @@ export class TimerComponent {
     }
   }
 
+  /**
+   * Plays end of timer sound. 
+   */
   private endSound() {
     if (this.settings.sound) {
       let alarm = new Audio('../assets/sounds/end.wav');
@@ -178,6 +235,8 @@ export class TimerComponent {
       }
     }
   }
+
+
   /**
    * src: https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
    */

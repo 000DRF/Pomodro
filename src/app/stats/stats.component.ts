@@ -20,7 +20,6 @@ export interface Data {
 })
 export class StatsComponent {
   @ViewChild('chartCanvas') private canvas: any;
-  private context: any;
   public chart !: any;
 
 
@@ -37,18 +36,27 @@ export class StatsComponent {
 
   }
 
+  /**
+   * Gets labels from session service. 
+   */
   public get labels(): Label[] {
     return this.session_service.labels;
   }
+
+  /**
+   * Validates from based on button toggle. 
+   */
   private get validForm(): boolean {
     if (this.queryType === 'range')
       return this.startControl.valid && this.endControl.valid;
-    else if (this.queryType === 'day')
-      return this.dayControl.valid
     else
-      return false /* Label control*/
+      return this.dayControl.valid
+
   }
 
+  /**
+   * Queries DB for data , then calls displayChart();
+   */
   public async view() {
     if (this.validForm) {
       await this.session_service.save();
@@ -68,13 +76,15 @@ export class StatsComponent {
         }
       }
       this.data = await (this.db.pullData(startDate, endDate));
-      console.log('db function returned', this.data)
       this.loading = false;
-      if(Object.keys(this.data).length > 0)
+      if (Object.keys(this.data).length > 0)
         this.displayChart();
     }
   }
 
+  /**
+   * Displays pie chart if data exists.
+   */
   private displayChart() {
     if (this.chart)
       this.chart.destroy();
@@ -121,6 +131,9 @@ export class StatsComponent {
     )
   }
 
+  /**
+   * Returns list of label names for chart.js
+   */
   private get labelNames(): string[] {
     let labels: string[] = [];
     Object.keys(this.data).forEach(key => {
@@ -129,6 +142,9 @@ export class StatsComponent {
     return labels
   }
 
+  /**
+   * returns list of colors for chart.js
+   */
   private get labelColors(): string[] {
     let colors: string[] = [];
     Object.keys(this.data).forEach(key => {
@@ -137,6 +153,9 @@ export class StatsComponent {
     return colors;
   }
 
+  /**
+   * Returns list of Time objects for time.js
+   */
   private get times(): Time[] {
     let times: Time[] = []
     Object.keys(this.data).forEach(key => {

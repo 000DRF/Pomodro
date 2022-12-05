@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { AuthService } from '../auth.service';
 import { SettingsService } from '../settings.service';
 
 @Component({
@@ -10,12 +10,7 @@ import { SettingsService } from '../settings.service';
 })
 export class SettingsComponent {
 
-  constructor(private settings: SettingsService) {
-
-  }
-
-  ngOnInit(): void {
-  }
+  constructor(private settings: SettingsService, private auth: AuthService) { }
 
   /**
    * src: https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API/Using_the_Notifications_API
@@ -50,15 +45,23 @@ export class SettingsComponent {
 
   }
 
-
+  /**
+   * Retrieves loading variable from settings service.
+   */
   public get loading(): boolean {
     return this.settings.loading;
   }
-
+  /**
+   * Retrieves form group from settings service.
+   */
   public get formGroup(): FormGroup {
     return this.settings.form_group;
   }
-
+  /**
+   * Formats label for mat-slider
+   * @param value 
+   * @returns 
+   */
   public formatLabel(value: number) {
     if (value < 60) {
       return value + 'm';
@@ -66,7 +69,9 @@ export class SettingsComponent {
 
     return '1hr';
   }
-
+  /**
+   * Saves settings to DB and notifies user if notifications were enabled. 
+   */
   public save() {
     if (!this.settings.settings.notifications && this.formGroup.get('notifications')?.value)
       this.notify()
@@ -77,4 +82,14 @@ export class SettingsComponent {
     return this.settings.updating
   }
 
+  public get isAnonymous(): boolean {
+    return this.auth.isAnonymous
+  }
+
+  /**
+   *  Signs the user out by calling method in auth service.
+   */
+  public signOut() {
+    this.auth.signOut();
+  }
 }
