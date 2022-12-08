@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;
+    margin-bottom: 24px;
 }
 
 .label {
@@ -11,4 +12,9 @@
 
 .mat-slider {
     width: 100%;
+}
+
+#actions {
+    display: flex;
+    height: 42px;
 }

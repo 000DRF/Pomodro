@@ -15,7 +15,7 @@
         </mat-chip-grid>
         <form [formGroup]="form_group" id="label-input">
             <span style="display: flex;">
-                <input matInput formControlName="color" type="color" id="color-input">
+                <input  formControlName="color" type="color" id="color-input">
                 <input matInput formControlName="name" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                     placeholder="Label name... (1 - 24) characters" [matChipInputFor]="chipGrid"
                     (matChipInputTokenEnd)="add()" style="flex: 1;">

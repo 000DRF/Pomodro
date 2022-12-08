@@ -1,7 +1,7 @@
 <span *ngIf="!loading else loading_bar" class="prevent-select">
     <form [formGroup]="formGroup">
 
-        <h2>Time</h2>
+        <h2>Timer</h2>
         <div class="section">
             <div>
                 <span class="label">
@@ -42,26 +42,24 @@
                 </mat-slider>
             </div>
         </div>
-        <mat-divider></mat-divider>
 
-        <h2>Timer</h2>
         <div class="section">
             <div>
-                <mat-slide-toggle formControlName="auto_pom">Auto start pomodoro</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="auto_pom">Auto start pomodoro</mat-slide-toggle>
             </div>
 
             <div>
-                <mat-slide-toggle formControlName="auto_break">Auto start break</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="auto_break">Auto start break</mat-slide-toggle>
             </div>
 
 
         </div>
-        <mat-divider></mat-divider>
+        <mat-divider style="margin-top: 12px;"></mat-divider>
 
         <h2>App</h2>
         <div class="section">
             <div>
-                <mat-slide-toggle color="primary" formControlName="notifications" >Notifications</mat-slide-toggle>
+                <mat-slide-toggle color="primary" formControlName="notifications">Notifications</mat-slide-toggle>
             </div>
 
             <div>
@@ -71,8 +69,9 @@
         </div>
 
     </form>
-    <div style=" display: flex; height: 3%; margin-top: 2%;" *ngIf="!updating; else loading_bar">
-        <button mat-stroked-button [color]="isAnonymous? 'primary': 'warn'" (click)="signOut()"> <b>{{isAnonymous? 'Create account': 'Sign out'}}</b> </button>
+    <div id="actions" *ngIf="!updating; else loading_bar">
+        <button mat-stroked-button [color]="isAnonymous? 'primary': 'warn'" (click)="signOut()"> <b>{{isAnonymous?
+                'Create account': 'Sign out'}}</b> </button>
         <span class="spacer"></span>
         <button mat-flat-button color="primary" (click)="save()">Apply</button>
     </div>
@@ -81,6 +80,6 @@
 
 <ng-template #loading_bar>
     <mat-card-footer>
-            <mat-progress-bar mode="query"></mat-progress-bar>
+        <mat-progress-bar mode="query"></mat-progress-bar>
     </mat-card-footer>
 </ng-template>
